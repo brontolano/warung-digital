@@ -1,0 +1,28 @@
+{
+  "name": "warung-digital",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Platform keuangan & stok warung — Den Ana Brontolano Retail",
+  "scripts": {
+    "install:all": "cd tier1-lite && echo 'Copy files to script.google.com manually' && cd ../tier2-pro/backend && npm install --legacy-peer-deps && cd ../frontend && npm install --legacy-peer-deps",
+    "dev:backend": "cd tier2-pro/backend && npm run start:dev",
+    "dev:frontend": "cd tier2-pro/frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "cd tier2-pro/frontend && npm run build && cd ../backend && npm run build",
+    "docker:up": "cd tier2-pro && docker-compose up -d",
+    "docker:down": "cd tier2-pro && docker-compose down",
+    "docker:build": "cd tier2-pro && docker-compose build",
+    "docker:logs": "cd tier2-pro && docker-compose logs -f",
+    "seed": "cd tier2-pro/backend && npm run seed",
+    "test": "cd tier2-pro/backend && npm test && cd ../frontend && npm test",
+    "migration:run": "cd tier2-pro/backend && npm run migration:run"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brontolano/warung-digital.git"
+  },
+  "license": "MIT"
+}
