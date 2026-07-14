@@ -3,7 +3,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+
 import { AuditModule } from './common/audit.module';
+import { AuthModule } from './auth/auth.module';
+import { ProductsModule } from './products/products.module';
+import { PosModule } from './pos/pos.module';
+import { CashdrawerModule } from './cashdrawer/cashdrawer.module';
+import { ArApModule } from './ar-ap/ar-ap.module';
+import { StockModule } from './stock/stock.module';
+import { MarketingModule } from './marketing/marketing.module';
+import { AttendanceModule } from './attendance/attendance.module';
+import { StorefrontModule } from './storefront/storefront.module';
+import { ReportsModule } from './reports/reports.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -25,6 +37,17 @@ import { AuditModule } from './common/audit.module';
     }),
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 100 }]),
     AuditModule,
+    AuthModule,
+    ProductsModule,
+    PosModule,
+    CashdrawerModule,
+    ArApModule,
+    StockModule,
+    MarketingModule,
+    AttendanceModule,
+    StorefrontModule,
+    ReportsModule,
+    WebhooksModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
