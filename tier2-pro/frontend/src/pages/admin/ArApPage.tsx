@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../components/AdminLayout';
-import { api } from '../contexts/AuthContext';
+import AdminLayout from '../../components/AdminLayout';
+import { api } from '../../contexts/AuthContext';
 
 export default function ArApPage() {
   const [tab, setTab] = useState<'ar' | 'ap'>('ar');
@@ -73,3 +73,4 @@ export default function ArApPage() {
     </AdminLayout>
   );
 }
+

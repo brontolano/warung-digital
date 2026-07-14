@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from '../components/AdminLayout';
+import AdminLayout from '../../components/AdminLayout';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function SettingsPage() {
@@ -15,3 +15,4 @@ export default function SettingsPage() {
     <p className="text-center text-xs text-gray-400">WarungDigital v1.0 | Den Ana Brontolano Retail</p>
   </div></AdminLayout>;
 }
+

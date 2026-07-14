@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AdminLayout from '../components/AdminLayout';
-import { api } from '../contexts/AuthContext';
+import AdminLayout from '../../components/AdminLayout';
+import { api } from '../../contexts/AuthContext';
 
 export default function AttendancePage() {
   const [userId, setUserId] = useState('');
@@ -23,3 +23,4 @@ export default function AttendancePage() {
     </div>
   </div></AdminLayout>;
 }
+

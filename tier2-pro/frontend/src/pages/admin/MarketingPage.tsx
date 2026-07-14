@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminLayout from '../components/AdminLayout';
+import AdminLayout from '../../components/AdminLayout';
 
 export default function MarketingPage() {
   return <AdminLayout><div className="space-y-4 max-w-4xl mx-auto"><h1 className="text-2xl font-bold">🏆 Marketing</h1>
@@ -10,3 +10,4 @@ export default function MarketingPage() {
     </div>
   </div></AdminLayout>;
 }
+

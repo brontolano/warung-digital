@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AdminLayout from '../components/AdminLayout';
+import AdminLayout from '../../components/AdminLayout';
 
 export default function ReportsPage() {
   const [period, setPeriod] = useState('today');
@@ -18,3 +18,4 @@ export default function ReportsPage() {
     <div className="bg-white rounded-xl shadow p-4"><h2 className="font-bold mb-3">Top Produk</h2><p className="text-gray-400 text-sm">Belum ada data.</p></div>
   </div></AdminLayout>;
 }
+

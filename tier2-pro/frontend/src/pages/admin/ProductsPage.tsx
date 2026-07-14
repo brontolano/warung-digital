@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import AdminLayout from '../components/AdminLayout';
-import { api } from '../contexts/AuthContext';
+import AdminLayout from '../../components/AdminLayout';
+import { api } from '../../contexts/AuthContext';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -75,3 +75,4 @@ export default function ProductsPage() {
     </AdminLayout>
   );
 }
+

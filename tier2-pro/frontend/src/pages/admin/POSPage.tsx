@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import AdminLayout from '../components/AdminLayout';
-import { api } from '../contexts/AuthContext';
+import AdminLayout from '../../components/AdminLayout';
+import { api } from '../../contexts/AuthContext';
 
 declare const Html5Qrcode: any;
 
@@ -100,3 +100,4 @@ export default function POSPage() {
     </AdminLayout>
   );
 }
+

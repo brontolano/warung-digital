@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import AdminLayout from '../../components/AdminLayout';
+export default function MarketingPage() {
+    return _jsx(AdminLayout, { children: _jsxs("div", { className: "space-y-4 max-w-4xl mx-auto", children: [_jsx("h1", { className: "text-2xl font-bold", children: "\uD83C\uDFC6 Marketing" }), _jsxs("div", { className: "grid md:grid-cols-3 gap-4", children: [_jsxs("div", { className: "bg-white rounded-xl shadow p-4", children: [_jsx("h3", { className: "font-bold", children: "\uD83C\uDFAF Loyalty Point" }), _jsx("p", { className: "text-sm text-gray-500 mt-2", children: "Manajemen poin pelanggan" })] }), _jsxs("div", { className: "bg-white rounded-xl shadow p-4", children: [_jsx("h3", { className: "font-bold", children: "\uD83D\uDCB0 Komisi Staff" }), _jsx("p", { className: "text-sm text-gray-500 mt-2", children: "Tracking komisi penjualan" })] }), _jsxs("div", { className: "bg-white rounded-xl shadow p-4", children: [_jsx("h3", { className: "font-bold", children: "\uD83C\uDFF7\uFE0F Promo" }), _jsx("p", { className: "text-sm text-gray-500 mt-2", children: "Buat promo & diskon" })] })] })] }) });
+}
