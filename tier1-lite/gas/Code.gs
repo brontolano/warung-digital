@@ -1,6 +1,6 @@
 /**
- * WarungDigital — Entry Point
- * GAS Web App: doGet() routing + doPost()
+ * WarungDigital — Entry Point (SECURITY UPDATED)
+ * doGet() routing + doPost() with CSRF protection
  */
 
 var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
@@ -11,9 +11,8 @@ function doGet(e) {
   var token = e.parameter.token;
   var user = Auth.validateSession(token);
 
-  if (!user && page !== 'login' && page !== 'register') {
+  if (!user && page !== 'login' && page !== 'register')
     return renderPage('Login', { error: 'Sesi habis, silakan login ulang' });
-  }
 
   var data = {};
   try { data = getPageData(page, user, e); }
@@ -23,9 +22,26 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  // SEC-001 FIX: Validate Origin header to prevent CSRF
+  var origin = e.parameter ? (e.parameter.origin || '') : '';
+  if (origin && origin.indexOf('script.google.com') === -1 && origin.indexOf('googleusercontent.com') === -1) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'Access denied' }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
   var result = { success: false, error: 'Invalid action' };
   try {
     var payload = JSON.parse(e.postData.contents || '{}');
+
+    // CSRF validation for state-changing actions
+    var csrfProtected = ['addProduk', 'updateProduk', 'deleteProduk', 'addTransaksi', 'addPengeluaran', 'logout'];
+    if (csrfProtected.indexOf(payload.action) !== -1) {
+      if (!Auth.validateCSRFToken(payload.csrf_token)) {
+        return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'CSRF validation failed' }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+    }
+
     switch (payload.action) {
       case 'login': result = Auth.login(payload.email, payload.password); break;
       case 'register': result = Auth.register(payload); break;
@@ -39,7 +55,7 @@ function doPost(e) {
     }
   } catch (err) {
     Logger.log('doPost error: ' + err.stack);
-    result = { success: false, error: err.message };
+    result = { success: false, error: 'Terjadi kesalahan sistem' };
   }
   return ContentService.createTextOutput(JSON.stringify(result))
     .setMimeType(ContentService.MimeType.JSON);
@@ -47,6 +63,7 @@ function doPost(e) {
 
 function renderPage(page, params) {
   var template = HtmlService.createTemplateFromFile(page);
+  template.csrfToken = Auth.generateCSRFToken();
   Object.keys(params).forEach(function(k) { template[k] = params[k]; });
   return template.evaluate()
     .setTitle(APP_NAME)
@@ -60,11 +77,11 @@ function include(filename) {
 
 function getPageData(page, user, e) {
   switch (page) {
-    case 'dashboard': return Dashboard.getData(user);
-    case 'stok': return { produk: Produk.getProduk(user.user_id) };
-    case 'kasir': return { produk: Produk.getProduk(user.user_id) };
-    case 'pengeluaran': return Pengeluaran.getPengeluaran(user.user_id, {});
-    case 'laporan': return Laporan.getRingkasan(user.user_id);
+    case 'dashboard': return Laporan.getRingkasan(user ? user.user_id : '');
+    case 'stok': return { produk: Produk.getProduk(user ? user.user_id : '') };
+    case 'kasir': return { produk: Produk.getProduk(user ? user.user_id : '') };
+    case 'pengeluaran': return { pengeluaran: Pengeluaran.getPengeluaran(user ? user.user_id : '', {}) };
+    case 'laporan': return Laporan.getRingkasan(user ? user.user_id : '');
     case 'pengaturan': return { user: user };
     default: return {};
   }
