@@ -1,0 +1,10 @@
+{
+  "name": "Den Ana Brontolano",
+  "short_name": "Den Ana",
+  "description": "Platform retail & keuangan warung",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "icons": []
+}

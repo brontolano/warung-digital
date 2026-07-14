@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index } from 'typeorm';
 
 @Entity('transaction_items')
 @Index(['transaction_id'])
@@ -9,10 +9,6 @@ export class TransactionItem {
 
   @Column({ name: 'transaction_id' })
   transaction_id: string;
-
-  @ManyToOne(() => Transaction, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'transaction_id' })
-  transaction: Transaction;
 
   @Column({ name: 'product_id' })
   product_id: string;
@@ -32,6 +28,3 @@ export class TransactionItem {
   @CreateDateColumn({ name: 'created_at' })
   created_at: Date;
 }
-
-// Re-export from pos module
-import { Transaction } from './transaction.entity';

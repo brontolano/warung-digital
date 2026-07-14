@@ -25,7 +25,8 @@ async function bootstrap() {
   // Validation
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
-  // API Versioning
+  // API Prefix + Versioning
+  app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
   // Swagger
