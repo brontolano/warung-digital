@@ -1,19 +1,44 @@
-version:'3.8'
+version: '3.8'
+
 services:
   postgres:
-    image:postgres:16-alpine
-    environment:[POSTGRES_DB:warung_digital,POSTGRES_USER:postgres,POSTGRES_PASSWORD:postgres]
-    ports:['5432:5432']
-    volumes:[pgdata:/var/lib/postgresql/data]
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: warung_digital
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports: ['5432:5432']
+    volumes: [pgdata:/var/lib/postgresql/data]
+
   backend:
-    build:./backend
-    ports:['3000:3000']
-    env_file:.env
-    depends_on:[postgres]
-  waha:
-    image:devlike/wa-ha:latest
-    ports:['3001:3001']
+    build: ./backend
+    ports: ['3000:3000']
+    env_file: .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      REDIS_HOST: redis
+    depends_on: [postgres]
+
+  frontend:
+    build: ./frontend
+    ports: ['80:80']
+    depends_on: [backend]
+    restart: unless-stopped
+
   n8n:
-    image:n8nio/n8n:latest
-    ports:['5678:5678']
-volumes:{pgdata:}
+    image: n8nio/n8n:latest
+    ports: ['5678:5678']
+    volumes: [n8ndata:/home/node/.n8n]
+    restart: unless-stopped
+
+  waha:
+    image: devlike/wa-ha:latest
+    ports: ['3001:3001']
+    volumes: [waha-sessions:/app/sessions]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  n8ndata:
+  waha-sessions:
