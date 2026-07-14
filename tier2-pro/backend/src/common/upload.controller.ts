@@ -14,7 +14,7 @@ export class UploadController {
         new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }), // 10MB max
         new FileTypeValidator({ fileType: /(jpg|jpeg|png|gif|pdf|doc|docx|xlsx)$/i }),
       ],
-    })) file: Express.Multer.File,
+    })) file: any,
   ) {
     // File validation OK — store logic here
     return { success: true, filename: file.originalname, size: file.size, mimetype: file.mimetype };
