@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/html5-qrcode"></script><title>WarungDigital — Kasir</title></head>
+<body class="bg-gray-50 pb-20">
+<div class="bg-green-600 text-white p-4"><h1 class="text-xl font-bold">💰 Kasir</h1></div>
+<div class="p-4 space-y-4">
+<div class="flex gap-2"><input id="searchProduk" class="flex-1 px-4 py-3 border rounded-xl text-base" placeholder="Cari barang..." onkeyup="searchProduk(this.value)"><button onclick="startScanner()" class="bg-gray-200 px-4 rounded-xl text-2xl">📷</button></div>
+<div id="reader" class="hidden"></div>
+<div id="searchResult" class="hidden max-h-40 overflow-y-auto bg-white rounded-xl shadow"></div>
+<div id="cartContent" class="bg-white rounded-xl shadow p-4">
+<h3 class="font-bold mb-2">Keranjang Belanja</h3>
+<div id="cartItems"><p class="text-gray-400 text-sm text-center py-4">Belum ada item</p></div>
+<div id="cartTotal" class="hidden border-t pt-3 mt-3">
+<div class="flex justify-between text-lg font-bold"><span>Total</span><span id="totalHarga">Rp 0</span></div>
+<div class="mt-3"><label class="text-sm">Metode Bayar</label>
+<select id="metodeBayar" class="w-full px-3 py-2 border rounded-lg mt-1"><option value="tunai">Tunai</option><option value="qris">QRIS</option><option value="transfer">Transfer</option></select></div>
+<button onclick="checkout()" class="bg-green-600 text-white w-full py-3 rounded-xl mt-3 text-lg font-semibold">💾 Simpan Transaksi</button></div></div></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-50"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">🏠</span><span class="text-xs">Beranda</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-green-600"><span class="text-2xl">💰</span><span class="text-xs">Kasir</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📦</span><span class="text-xs">Stok</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💸</span><span class="text-xs">Biaya</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📊</span><span class="text-xs">Laporan</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">⚙️</span><span class="text-xs">Atur</span></button>
+</div></div>
+<script>
+var allProduk = <?= JSON.stringify(data.produk || []) ?>;
+var cart = [];
+function nav(page){window.location.href='?page='+page+'&token='+token}
+
+function searchProduk(q){
+if(q.length<2){document.getElementById('searchResult').classList.add('hidden');return}
+var r=allProduk.filter(function(p){return p.nama_produk&&p.nama_produk.toLowerCase().includes(q.toLowerCase())}).slice(0,8);
+var el=document.getElementById('searchResult');el.classList.remove('hidden');
+if(r.length===0){el.innerHTML='<div class="p-3 text-gray-400">Tidak ditemukan</div>';return}
+el.innerHTML=r.map(function(p){return '<div class="p-3 border-b hover:bg-gray-50 cursor-pointer" onclick="addToCart(\''+p.produk_id+'\',\''+p.nama_produk+'\','+p.harga_jual+')"><div class="font-medium">'+p.nama_produk+'</div><div class="text-sm text-gray-500">Stok: '+p.stok+' | Rp '+(p.harga_jual||0).toLocaleString('id-ID')+'</div></div>'}).join('')}
+
+function addToCart(id,nama,harga){var c=cart.find(function(x){return x.produk_id===id});if(c){c.qty++}else{cart.push({produk_id:id,nama:nama,harga:Number(harga),qty:1})};renderCart();document.getElementById('searchResult').classList.add('hidden');document.getElementById('searchProduk').value=''}
+function renderCart(){var el=document.getElementById('cartItems'),te=document.getElementById('cartTotal')
+if(cart.length===0){el.innerHTML='<p class="text-gray-400 text-sm text-center py-4">Belum ada item</p>';te.classList.add('hidden');return}
+te.classList.remove('hidden');var total=0
+el.innerHTML=cart.map(function(c,i){total+=c.harga*c.qty;return '<div class="flex justify-between items-center py-2 border-b text-sm"><span>'+c.nama+' x'+c.qty+'</span><div><span class="font-medium">Rp '+(c.harga*c.qty).toLocaleString('id-ID')+'</span> <button onclick="cart.splice('+i+',1);renderCart()" class="text-red-500 ml-2">✕</button></div></div>'}).join('')
+document.getElementById('totalHarga').innerText='Rp '+total.toLocaleString('id-ID')}
+function checkout(){
+if(cart.length===0){alert('Keranjang kosong!');return}
+var metode=document.getElementById('metodeBayar').value,token=new URLSearchParams(window.location.search).get('token')||localStorage.getItem('token'),user=JSON.parse(localStorage.getItem('user')||'{}')
+google.script.run.withSuccessHandler(function(r){if(r.success){alert('Berhasil! Rp '+(r.total||0).toLocaleString('id-ID')+' tersimpan.');cart=[];renderCart()}else{alert('Error: '+r.error)}}).addTransaksi({user_id:user.user_id,metode_bayar:metode},cart)}
+function startScanner(){var el=document.getElementById('reader');el.classList.toggle('hidden');if(el.classList.contains('hidden'))return
+new Html5Qrcode('reader').start({facingMode:'environment'},{fps:10,qrbox:{width:250,height:150}},function(code){scanner.stop();el.classList.add('hidden')
+var p=allProduk.find(function(x){return String(x.barcode)===String(code)});if(p){addToCart(p.produk_id,p.nama_produk,p.harga_jual)}else{alert('Barcode tidak ditemukan')}},function(){})}
+</script></body></html>

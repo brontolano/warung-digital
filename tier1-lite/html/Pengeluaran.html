@@ -1,0 +1,21 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Pengeluaran</title></head>
+<body class="bg-gray-50 pb-20"><div class="bg-green-600 text-white p-4"><h1 class="text-xl font-bold">💸 Pengeluaran</h1></div>
+<div class="p-4 space-y-4"><div class="card space-y-3">
+<input id="fDeskripsi" class="input-field" placeholder="Deskripsi *">
+<div class="flex gap-2"><input id="fNominal" type="number" class="flex-1 input-field" placeholder="Nominal *">
+<select id="fKategori" class="input-field"><option value="modal">Modal</option><option value="operasional">Operasional</option><option value="gaji">Gaji</option><option value="lain-lain">Lainnya</option></select></div>
+<button onclick="simpan()" class="btn-primary w-full">💾 Simpan</button></div>
+<div id="listPengeluaran"></div></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-50"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">🏠</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💰</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📦</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-green-600"><span class="text-2xl">💸</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📊</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">⚙️</span></button>
+</div></div>
+<script>
+function nav(p){window.location.href='?page='+p+'&token='+token}
+function simpan(){var d={deskripsi:document.getElementById('fDeskripsi').value,nominal:Number(document.getElementById('fNominal').value)||0,kategori:document.getElementById('fKategori').value,user_id:(JSON.parse(localStorage.getItem('user')||'{}')).user_id};if(!d.deskripsi||!d.nominal){alert('Isi deskripsi dan nominal!');return}
+google.script.run.withSuccessHandler(function(r){if(r.success){location.reload()}else{alert(r.error)}}).addPengeluaran(d)}
+</script></body></html>

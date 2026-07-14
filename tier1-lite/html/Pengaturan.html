@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Pengaturan</title></head>
+<body class="bg-gray-50 pb-20"><div class="bg-green-600 text-white p-4"><h1 class="text-xl font-bold">⚙️ Pengaturan</h1></div>
+<div class="p-4 space-y-4">
+<div class="card"><h3 class="font-bold mb-3">Profil Warung</h3><p class="text-sm" id="pInfo"></p></div>
+<button onclick="logout()" class="bg-red-500 text-white w-full py-3 rounded-lg">🚪 Logout</button>
+<p class="text-center text-xs text-gray-400">WarungDigital v1.0</p></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-50"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">🏠</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💰</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📦</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💸</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📊</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-green-600"><span class="text-2xl">⚙️</span></button>
+</div></div>
+<script>
+var user = JSON.parse(localStorage.getItem('user')||'{}');
+function nav(p){window.location.href='?page='+p+'&token='+token}
+function logout(){google.script.run.withSuccessHandler(function(){localStorage.clear();window.location.href='?page=login'}).logout(token)}
+document.getElementById('pInfo').innerHTML='Nama Warung: '+(user.nama_warung||'-')+'<br>Pemilik: '+(user.nama_pemilik||'-')+'<br>Email: '+(user.email||'-')+'<br>WA: '+(user.no_wa||'-');
+</script></body></html>

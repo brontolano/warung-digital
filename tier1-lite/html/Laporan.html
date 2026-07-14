@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Laporan</title></head>
+<body class="bg-gray-50 pb-20"><div class="bg-green-600 text-white p-4"><h1 class="text-xl font-bold">📊 Laporan</h1></div>
+<div class="p-4 space-y-4" id="laporanContent">Memuat laporan...</div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-50"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">🏠</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💰</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📦</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💸</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-green-600"><span class="text-2xl">📊</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">⚙️</span></button>
+</div></div>
+<script>
+function nav(p){window.location.href='?page='+p+'&token='+token}
+function nf(n){return Number(n).toLocaleString('id-ID')}
+google.script.run.withSuccessHandler(function(d){
+var html='<div class="card"><h2 class="font-bold text-lg mb-3">Laporan Keuangan Hari Ini</h2>'
++'<table class="w-full"><tr><td class="py-2">Penjualan</td><td class="text-right font-bold text-green-600">Rp '+(d.penjualan_hari_ini||0).toLocaleString()+'</td></tr>'
++'<tr><td class="py-2">Pengeluaran</td><td class="text-right font-bold text-red-600">Rp '+(d.pengeluaran_hari_ini||0).toLocaleString()+'</td></tr>'
++'<tr class="border-t"><td class="py-2 font-bold">Laba Bersih</td><td class="text-right font-bold text-blue-600">Rp '+((d.penjualan_hari_ini||0)-(d.pengeluaran_hari_ini||0)).toLocaleString()+'</td></tr>'
++'</table></div>'
++'<div class="card"><p class="text-gray-500">Total Transaksi: '+(d.total_transaksi||0)+' | Total Produk: '+(d.total_produk||0)+'</p></div>'
++'<p class="text-xs text-gray-400 text-center">Data bisa di-download langsung dari Google Sheets</p>';
+document.getElementById('laporanContent').innerHTML=html;
+}).getPageData('laporan',JSON.parse(localStorage.getItem('user')||'{}'))
+</script></body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Dashboard</title></head>
+<body class="bg-gray-50 pb-20">
+<div class="bg-green-600 text-white p-4"><div class="flex justify-between items-center"><h1 class="text-xl font-bold"><span id="warungName">WarungDigital</span></h1><span class="text-sm" id="userName">Hai!</span></div></div>
+<div class="p-4 space-y-4" id="content"><div class="text-center py-8 text-gray-500">Memuat data...</div></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-50"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-green-600"><span class="text-2xl">🏠</span><span class="text-xs">Beranda</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💰</span><span class="text-xs">Kasir</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📦</span><span class="text-xs">Stok</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💸</span><span class="text-xs">Biaya</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📊</span><span class="text-xs">Laporan</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">⚙️</span><span class="text-xs">Atur</span></button>
+</div></div>
+<script>
+var token = new URLSearchParams(window.location.search).get('token')||localStorage.getItem('token');
+var user = JSON.parse(localStorage.getItem('user')||'{}');
+document.getElementById('warungName').innerText=user.nama_warung||'WarungDigital';
+document.getElementById('userName').innerText='Hai, '+(user.nama_pemilik||'Pengguna')+'!';
+function nav(page){window.location.href='?page='+page+'&token='+token}
+
+google.script.run
+.withSuccessHandler(function(d){
+if(d.error){document.getElementById('content').innerHTML='<div class="text-red-500 p-4">'+d.error+'</div>';return}
+var html='<div class="grid grid-cols-2 gap-3">'
++'<div class="card"><p class="text-gray-500 text-xs">Penjualan</p><p class="text-2xl font-bold text-green-600">Rp '+(d.penjualan_hari_ini||0).toLocaleString('id-ID')+'</p></div>'
++'<div class="card"><p class="text-gray-500 text-xs">Pengeluaran</p><p class="text-2xl font-bold text-red-600">Rp '+(d.pengeluaran_hari_ini||0).toLocaleString('id-ID')+'</p></div>'
++'<div class="card"><p class="text-gray-500 text-xs">Laba Hari Ini</p><p class="text-2xl font-bold text-blue-600">Rp '+(d.laba_hari_ini||0).toLocaleString('id-ID')+'</p></div>'
++'<div class="card"><p class="text-gray-500 text-xs">Total Produk</p><p class="text-2xl font-bold">'+(d.total_produk||0)+'</p></div>'
++'</div>';
+if(d.stok_menipis&&d.stok_menipis.length>0){
+html+='<div class="bg-red-50 p-4 rounded-xl border border-red-200"><h3 class="font-bold text-red-700 mb-2">⚠️ Stok Menipis</h3>'
++d.stok_menipis.map(function(p){return '<div class="flex justify-between text-sm text-red-600"><span>'+p.nama_produk+'</span><span>'+p.stok+' '+(p.satuan||'pcs')+'</span></div>'}).join('')+'</div>'}
+if(d.transaksi_terakhir&&d.transaksi_terakhir.length>0){
+html+='<div class="card"><h3 class="font-bold mb-3">Transaksi Terakhir</h3>'
++d.transaksi_terakhir.map(function(t){return '<div class="flex justify-between py-2 border-b text-sm"><span>'+(t.timestamp||'').substring(0,16)+'</span><span class="font-bold">Rp '+(t.total_jual||0).toLocaleString('id-ID')+'</span></div>'}).join('')+'</div>'}
+html+='<div class="text-center py-4"><button onclick="nav(\'kasir\')" class="bg-green-600 text-white px-6 py-3 rounded-xl text-lg font-semibold">💰 Mulai Transaksi</button></div>';
+document.getElementById('content').innerHTML=html;
+})
+.withFailureHandler(function(e){document.getElementById('content').innerHTML='<div class="text-red-500 p-4">Error: '+e.message+'</div>'})
+.getPageData('dashboard',user);
+</script></body></html>

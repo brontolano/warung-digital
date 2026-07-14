@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Stok</title></head>
+<body class="bg-gray-50 pb-20">
+<div class="bg-green-600 text-white p-4"><h1 class="text-xl font-bold">📦 Manajemen Stok</h1></div>
+<div class="p-4"><button onclick="showModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg mb-4">+ Tambah Barang</button><div id="produkList" class="space-y-2">Memuat...</div></div>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-end justify-center z-50"><div class="bg-white w-full max-w-lg rounded-t-2xl p-6 max-h-screen overflow-y-auto">
+<h2 id="modalTitle" class="text-xl font-bold mb-4">Tambah Barang</h2>
+<input id="fBarcode" class="input-field mb-2" placeholder="Barcode (opsional)">
+<input id="fNama" class="input-field mb-2" placeholder="Nama Barang *">
+<div class="flex gap-2 mb-2"><input id="fHargaBeli" type="number" class="flex-1 input-field" placeholder="Harga Beli"><input id="fHargaJual" type="number" class="flex-1 input-field" placeholder="Harga Jual *"></div>
+<div class="flex gap-2 mb-2"><input id="fStok" type="number" class="flex-1 input-field" placeholder="Stok"><input id="fStokMin" type="number" class="flex-1 input-field" placeholder="Min Stok" value="5"></div>
+<select id="fSatuan" class="input-field mb-4"><option value="pcs">pcs</option><option value="pack">pack</option><option value="dus">dus</option><option value="kg">kg</option></select>
+<input id="editId" type="hidden"><div class="flex gap-2"><button onclick="closeModal()" class="flex-1 btn-secondary">Batal</button><button onclick="saveProduk()" class="flex-1 btn-primary">Simpan</button></div></div></div>
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t z-40"><div class="flex justify-around py-2">
+<button onclick="nav('dashboard')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">🏠</span></button>
+<button onclick="nav('kasir')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💰</span></button>
+<button onclick="nav('stok')" class="flex flex-col items-center text-green-600"><span class="text-2xl">📦</span></button>
+<button onclick="nav('pengeluaran')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">💸</span></button>
+<button onclick="nav('laporan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">📊</span></button>
+<button onclick="nav('pengaturan')" class="flex flex-col items-center text-gray-500"><span class="text-2xl">⚙️</span></button>
+</div></div>
+<script>
+var produkData=<?= JSON.stringify(data.produk || []) ?>;
+function nav(page){window.location.href='?page='+page+'&token='+token}
+function renderProduk(){
+var el=document.getElementById('produkList');
+if(produkData.length===0){el.innerHTML='<p class="text-gray-400 text-center py-8">Belum ada produk. Tambah sekarang!</p>';return}
+el.innerHTML=produkData.map(function(p){var sc=p.stok<=p.stok_minimum?'text-red-600 font-bold':'text-gray-700'
+return '<div class="bg-white p-4 rounded-xl shadow flex justify-between items-center"><div><div class="font-medium">'+p.nama_produk+'</div><div class="text-sm text-gray-500">Rp '+(p.harga_jual||0).toLocaleString('id-ID')+'</div></div><div class="text-right"><div class="'+sc+'">'+p.stok+' '+(p.satuan||'pcs')+'</div><div class="flex gap-1 mt-1"><button onclick="editProduk(\''+p.produk_id+'\')" class="text-blue-600 text-xs">Edit</button><button onclick="hapusProduk(\''+p.produk_id+'\')" class="text-red-600 text-xs">Hapus</button></div></div></div>'}).join('')}
+function showModal(){document.getElementById('modal').classList.remove('hidden');document.getElementById('modal').classList.add('flex')}
+function closeModal(){document.getElementById('modal').classList.add('hidden');document.getElementById('modal').classList.remove('flex')}
+function saveProduk(){var d={barcode:document.getElementById('fBarcode').value,nama_produk:document.getElementById('fNama').value,harga_beli:Number(document.getElementById('fHargaBeli').value)||0,harga_jual:Number(document.getElementById('fHargaJual').value)||0,stok:Number(document.getElementById('fStok').value)||0,stok_minimum:Number(document.getElementById('fStokMin').value)||5,satuan:document.getElementById('fSatuan').value}
+if(!d.nama_produk){alert('Nama harus diisi');return}
+var eid=document.getElementById('editId').value
+if(eid){google.script.run.withSuccessHandler(function(r){if(r.success){location.reload()}else{alert(r.error)}}).updateProduk(eid,d)}else{google.script.run.withSuccessHandler(function(r){if(r.success){location.reload()}else{alert(r.error)}}).addProduk(d)}}
+function editProduk(id){var p=produkData.find(function(x){return x.produk_id===id});if(!p)return
+document.getElementById('modalTitle').innerText='Edit Barang';document.getElementById('editId').value=id;document.getElementById('fBarcode').value=p.barcode||'';document.getElementById('fNama').value=p.nama_produk||'';document.getElementById('fHargaBeli').value=p.harga_beli||0;document.getElementById('fHargaJual').value=p.harga_jual||0;document.getElementById('fStok').value=p.stok||0;document.getElementById('fStokMin').value=p.stok_minimum||5;document.getElementById('fSatuan').value=p.satuan||'pcs';showModal()}
+function hapusProduk(id){if(!confirm('Yakin hapus?'))return;google.script.run.withSuccessHandler(function(r){if(r.success){location.reload()}else{alert(r.error)}}).deleteProduk(id)}
+renderProduk();
+</script></body></html>
