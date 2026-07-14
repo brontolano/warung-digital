@@ -768,5 +768,86 @@ server {
 
 ---
 
-*Dokumen ini disusun sebagai panduan coding untuk pengembangan WarungDigital.*  
-*README v1.0 — 14 Juli 2026*
+---
+
+## Security Status
+
+| Severity | Issue | Status |
+|----------|-------|--------|
+| 🔴 **CRITICAL** | CSRF Protection (GAS) | ✅ Fixed — Origin validation + token |
+| 🟠 **HIGH** | Password Salt (GAS) | ✅ Fixed — SHA-256 + per-user salt |
+| 🟠 **HIGH** | JWT Refresh Rotation | ✅ Fixed — 1h access + 7d refresh |
+| 🟡 **MEDIUM** | CSP Headers | ✅ Fixed — Helmet configuration |
+| 🟡 **MEDIUM** | Rate Limiting | ✅ Fixed — ThrottlerGuard 100/min |
+| 🟡 **MEDIUM** | Error Sanitization | ✅ Fixed — GlobalExceptionFilter |
+| 🟢 **LOW** | Audit Trail | ✅ Fixed — AuditLog module |
+| 🟢 **LOW** | File Upload Validation | ✅ Fixed — 10MB + type check |
+| 🟢 **LOW** | HTTPS | ✅ Auto (Google Apps Script) |
+
+**Detail:** Lihat [SECURITY.md](SECURITY.md)
+
+---
+
+## API Reference (Tier 2)
+
+| Method | Endpoint | Auth | Deskripsi |
+|--------|----------|------|-----------|
+| POST | `/api/v1/auth/register` | - | Register akun baru |
+| POST | `/api/v1/auth/login` | - | Login → JWT |
+| POST | `/api/v1/auth/refresh` | - | Refresh access token |
+| GET | `/api/v1/auth/me` | JWT | Profil user saat ini |
+| GET | `/api/v1/products` | JWT | List produk |
+| POST | `/api/v1/products` | JWT | Tambah produk |
+| GET | `/api/v1/products/:id` | JWT | Detail + tiers |
+| POST | `/api/v1/products/:id/tiers` | JWT | Tambah tier harga |
+| GET | `/api/v1/products/:id/price?qty=X` | JWT | Hitung harga by qty |
+| POST | `/api/v1/transactions` | JWT | Input transaksi |
+| GET | `/api/v1/transactions` | JWT | List transaksi |
+| POST | `/api/v1/transactions/:id/void` | JWT | Void + restock |
+| POST | `/api/v1/cashdrawer/open` | JWT | Buka shift |
+| POST | `/api/v1/cashdrawer/:id/close` | JWT | Tutup shift |
+| GET | `/api/v1/cashdrawer/history` | JWT | Riwayat shift |
+| GET/POST | `/api/v1/ar` | JWT | Piutang CRUD |
+| POST | `/api/v1/ar/:id/pay` | JWT | Bayar piutang |
+| GET/POST | `/api/v1/ap` | JWT | Hutang CRUD |
+| POST | `/api/v1/ap/:id/pay` | JWT | Bayar hutang |
+| POST | `/api/v1/attendance/checkin` | JWT | Check-in karyawan |
+| POST | `/api/v1/attendance/checkout` | JWT | Check-out karyawan |
+| POST | `/api/v1/stock-opname` | JWT | Input stok opname |
+| POST | `/api/v1/stock-opname/:id/confirm` | JWT | Konfirmasi opname |
+| GET | `/api/v1/reports/profit-loss` | JWT | Laporan laba rugi |
+| GET | `/api/v1/reports/top-products` | JWT | Top produk |
+| GET | `/api/v1/storefront/:slug` | - | Info toko publik |
+| GET | `/api/v1/storefront/:slug/products` | - | Produk publik |
+| POST | `/api/v1/storefront/:slug/checkout` | - | Checkout COD |
+
+---
+
+## Quick Start — Production
+
+```bash
+# 1. Clone & setup
+git clone https://github.com/brontolano/warung-digital.git
+cd warung-digital/tier2-pro
+cp .env.example .env  # Isi JWT_SECRET, DB_PASSWORD
+
+# 2. Docker Deploy
+docker-compose build
+docker-compose up -d
+
+# 3. Migrate + Seed
+docker-compose exec backend npm run migration:run
+docker-compose exec backend npm run seed
+
+# 4. Open
+# Admin: http://localhost:5173/admin/login
+# API:   http://localhost:3000/api/v1
+# Docs:  http://localhost:3000/api/docs
+
+# 5. Tier 1 (GAS) — Buka script.google.com
+# Buat project → copy tier1-lite/gas/* + tier1-lite/html/*
+# Set SPREADSHEET_ID + CALLMEBOT_KEY → Deploy
+```
+
+*Dokumen ini disusun sebagai panduan coding untuk pengembangan WarungDigital. Versi 2.0.*  
+*README v2.0 — 14 Juli 2026*
