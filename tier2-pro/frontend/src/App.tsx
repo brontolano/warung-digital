@@ -11,6 +11,13 @@ import AttendancePage from './pages/admin/AttendancePage';
 import ReportsPage from './pages/admin/ReportsPage';
 import SettingsPage from './pages/admin/SettingsPage';
 
+// Storefront
+import Home from './pages/storefront/Home';
+import Katalog from './pages/storefront/Katalog';
+import Detail from './pages/storefront/Detail';
+import Checkout from './pages/storefront/Checkout';
+import TrackOrder from './pages/storefront/TrackOrder';
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="p-8 text-center text-gray-500">Memuat...</div>;
@@ -22,6 +29,14 @@ export default function App() {
   return (
     <AuthProvider>
       <Routes>
+        {/* Storefront (Public) */}
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Katalog />} />
+        <Route path="/products/:id" element={<Detail />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders/track" element={<TrackOrder />} />
+
+        {/* Admin Panel */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/admin/pos" element={<ProtectedRoute><POSPage /></ProtectedRoute>} />
@@ -32,7 +47,7 @@ export default function App() {
         <Route path="/admin/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
         <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-        <Route path="/" element={<div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-white p-4"><div className="text-center max-w-md"><div className="text-6xl mb-4">🏪</div><h1 className="text-3xl font-bold text-green-800 mb-2">Den Ana — Brontolano Retail</h1><p className="text-gray-500 mb-6">Platform manajemen toko & warung</p><a href="/admin/login" className="bg-green-600 text-white px-8 py-3 rounded-xl font-semibold inline-block">Masuk ke Admin</a></div></div>} />
+
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </AuthProvider>
