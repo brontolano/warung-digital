@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><base target="_top"><meta name="viewport" content="width=device-width,initial-scale=1.0"><script src="https://cdn.tailwindcss.com"></script><title>WarungDigital — Login</title></head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+<div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-6">
+<div class="text-center mb-6"><div class="text-5xl mb-2">🏪</div><h1 class="text-2xl font-bold text-gray-800">WarungDigital</h1><p class="text-gray-500 text-sm">Catat keuangan warung, gratis!</p></div>
+<div id="errorMsg" class="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm hidden"></div>
+<div id="tabLogin" class="space-y-4">
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Email</label><input id="email" type="email" class="w-full px-4 py-3 border rounded-lg text-base focus:ring-2 focus:ring-green-500" placeholder="contoh@gmail.com"></div>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Password</label><input id="password" type="password" class="w-full px-4 py-3 border rounded-lg text-base focus:ring-2 focus:ring-green-500" placeholder="Password"></div>
+<button onclick="login()" class="bg-green-600 w-full text-white py-3 rounded-lg text-lg font-semibold">Login</button>
+<p class="text-center text-sm text-gray-500">Belum punya akun? <a href="#" onclick="showRegister()" class="text-green-600 font-medium">Daftar</a></p>
+<p class="text-center"><a href="#" onclick="showLoginWA()" class="text-green-600 text-sm">Login via WhatsApp</a></p>
+</div>
+<div id="tabRegister" class="space-y-3 hidden">
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Nama Warung</label><input id="regWarung" class="w-full px-4 py-3 border rounded-lg text-base"></div>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Nama Pemilik</label><input id="regNama" class="w-full px-4 py-3 border rounded-lg text-base"></div>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Email</label><input id="regEmail" type="email" class="w-full px-4 py-3 border rounded-lg text-base"></div>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">No. WhatsApp</label><input id="regWA" type="tel" class="w-full px-4 py-3 border rounded-lg text-base" placeholder="628123456789"></div>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Password</label><input id="regPassword" type="password" class="w-full px-4 py-3 border rounded-lg text-base"></div>
+<button onclick="register()" class="bg-green-600 w-full text-white py-3 rounded-lg text-lg font-semibold">Daftar Gratis</button>
+<p class="text-center text-sm text-gray-500">Sudah punya akun? <a href="#" onclick="showLogin()" class="text-green-600 font-medium">Login</a></p>
+</div>
+<div id="tabLoginWA" class="space-y-4 hidden">
+<p class="text-gray-600 text-sm">Masukkan nomor WhatsApp kamu.</p>
+<div><label class="block text-sm font-medium text-gray-700 mb-1">No. WhatsApp</label><input id="waWA" type="tel" class="w-full px-4 py-3 border rounded-lg text-base" placeholder="628123456789"></div>
+<button onclick="sendOTP()" class="bg-green-600 w-full text-white py-3 rounded-lg text-lg font-semibold">Kirim OTP</button>
+<div id="otpSection" class="hidden space-y-3">
+<div><label class="block text-sm font-medium text-gray-700 mb-1">Kode OTP</label><input id="waOTP" type="text" class="w-full px-4 py-3 border rounded-lg text-base" placeholder="4 digit"></div>
+<button onclick="verifyOTP()" class="bg-blue-600 w-full text-white py-3 rounded-lg text-lg font-semibold">Verifikasi</button></div>
+<p class="text-center"><a href="#" onclick="showLogin()" class="text-green-600 text-sm">Login via Email</a></p>
+</div></div>
+<script>
+function showError(m){var e=document.getElementById('errorMsg');e.innerHTML=m;e.classList.remove('hidden')}
+function hideError(){document.getElementById('errorMsg').classList.add('hidden')}
+function showTab(t){['tabLogin','tabRegister','tabLoginWA'].forEach(function(x){document.getElementById(x).classList.add('hidden')});document.getElementById(t).classList.remove('hidden');hideError()}
+function showRegister(){showTab('tabRegister')}function showLogin(){showTab('tabLogin')}function showLoginWA(){showTab('tabLoginWA')}
+function login(){hideError();var e=document.getElementById('email').value,p=document.getElementById('password').value;if(!e||!p){showError('Email dan password harus diisi');return}
+google.script.run.withSuccessHandler(function(r){if(r.success){localStorage.setItem('token',r.token);localStorage.setItem('user',JSON.stringify(r.user));window.location.href='?page=dashboard&token='+r.token}else{showError(r.error||'Login gagal')}}).login(e,p)}
+function register(){hideError();var d={email:document.getElementById('regEmail').value,password:document.getElementById('regPassword').value,nama_warung:document.getElementById('regWarung').value,nama_pemilik:document.getElementById('regNama').value,no_wa:document.getElementById('regWA').value};if(!d.email||!d.password||!d.nama_warung||!d.nama_pemilik){showError('Semua field harus diisi');return}
+google.script.run.withSuccessHandler(function(r){if(r.success){localStorage.setItem('token',r.token);localStorage.setItem('user',JSON.stringify(r.user));window.location.href='?page=dashboard&token='+r.token}else{showError(r.error||'Daftar gagal')}}).register(d)}
+function sendOTP(){hideError();var wa=document.getElementById('waWA').value;if(!wa){showError('Nomor WA harus diisi');return}
+google.script.run.withSuccessHandler(function(r){if(r.success){document.getElementById('otpSection').classList.remove('hidden');showError('Kode OTP sudah dikirim!')}else{showError(r.error)}}).loginWA(wa)}
+function verifyOTP(){var wa=document.getElementById('waWA').value,otp=document.getElementById('waOTP').value
+google.script.run.withSuccessHandler(function(r){if(r.success){localStorage.setItem('token',r.token);localStorage.setItem('user',JSON.stringify(r.user));window.location.href='?page=dashboard&token='+r.token}else{showError(r.error||'OTP salah')}}).verifyOTP(wa,otp)}
+</script></body></html>

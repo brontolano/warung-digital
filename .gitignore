@@ -1,0 +1,36 @@
+# OS files
+Thumbs.db
+.DS_Store
+*.swp
+*.swo
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.user
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+.next/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# GAS clasp
+.clasp.json
+~clasp.json
+
+# Logs
+logs/
+*.log
