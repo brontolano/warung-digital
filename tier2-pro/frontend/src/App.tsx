@@ -4,6 +4,7 @@ import LoginPage from './pages/admin/LoginPage';
 import DashboardPage from './pages/admin/DashboardPage';
 import POSPage from './pages/admin/POSPage';
 import ProductsPage from './pages/admin/ProductsPage';
+import CategoriesPage from './pages/admin/CategoriesPage';
 import CashdrawerPage from './pages/admin/CashdrawerPage';
 import ArApPage from './pages/admin/ArApPage';
 import MarketingPage from './pages/admin/MarketingPage';
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/admin" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/admin/pos" element={<ProtectedRoute><POSPage /></ProtectedRoute>} />
         <Route path="/admin/products" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
+        <Route path="/admin/categories" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
         <Route path="/admin/cashdrawer" element={<ProtectedRoute><CashdrawerPage /></ProtectedRoute>} />
         <Route path="/admin/ar-ap" element={<ProtectedRoute><ArApPage /></ProtectedRoute>} />
         <Route path="/admin/marketing" element={<ProtectedRoute><MarketingPage /></ProtectedRoute>} />
