@@ -6,10 +6,13 @@ const navItems = [
   { path: '/admin', icon: '🏠', label: 'Dashboard' },
   { path: '/admin/pos', icon: '💰', label: 'POS' },
   { path: '/admin/products', icon: '📦', label: 'Produk' },
+  { path: '/admin/stock', icon: '📋', label: 'Stok Opname' },
   { path: '/admin/cashdrawer', icon: '🧾', label: 'Shift' },
   { path: '/admin/ar-ap', icon: '📋', label: 'Hutang' },
+  { path: '/admin/storefront', icon: '🏪', label: 'Toko' },
   { path: '/admin/marketing', icon: '🏆', label: 'Marketing' },
   { path: '/admin/attendance', icon: '🕐', label: 'Absensi' },
+  { path: '/admin/webhooks', icon: '🔗', label: 'Integrasi' },
   { path: '/admin/reports', icon: '📊', label: 'Laporan' },
   { path: '/admin/settings', icon: '⚙️', label: 'Atur' },
 ];
@@ -27,7 +30,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-green-800 text-white">
         <div className="p-4 font-bold text-lg border-b border-green-700">🏪 WarungDigital</div>
-        <nav className="flex-1 p-2 space-y-1">
+        <nav className="flex-1 p-2 space-y-1 overflow-y-auto">
           {navItems.map(item => (
             <Link key={item.path} to={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${pathname === item.path ? 'bg-green-600 text-white' : 'text-green-100 hover:bg-green-700'}`}>
@@ -53,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
           <div className="md:hidden fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)}>
-            <div className="w-64 bg-green-800 h-full p-4 text-white" onClick={e => e.stopPropagation()}>
+            <div className="w-64 bg-green-800 h-full p-4 text-white overflow-y-auto" onClick={e => e.stopPropagation()}>
               <button onClick={() => setSidebarOpen(false)} className="text-white text-2xl mb-4">✕</button>
               {navItems.map(item => (
                 <Link key={item.path} to={item.path} onClick={() => setSidebarOpen(false)}
@@ -70,8 +73,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t z-40">
-        <div className="flex justify-around py-2 text-xs">
-          {navItems.slice(0, 5).map(item => (
+        <div className="flex justify-around py-2 text-xs overflow-x-auto">
+          {navItems.slice(0, 6).map(item => (
             <Link key={item.path} to={item.path}
               className={`flex flex-col items-center px-2 ${pathname === item.path ? 'text-green-600' : 'text-gray-500'}`}>
               <span className="text-xl">{item.icon}</span><span>{item.label}</span>

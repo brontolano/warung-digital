@@ -8,6 +8,9 @@ import CashdrawerPage from './pages/admin/CashdrawerPage';
 import ArApPage from './pages/admin/ArApPage';
 import MarketingPage from './pages/admin/MarketingPage';
 import AttendancePage from './pages/admin/AttendancePage';
+import StockPage from './pages/admin/StockPage';
+import StorefrontPage from './pages/admin/StorefrontPage';
+import WebhooksPage from './pages/admin/WebhooksPage';
 import ReportsPage from './pages/admin/ReportsPage';
 import SettingsPage from './pages/admin/SettingsPage';
 
@@ -45,6 +48,9 @@ export default function App() {
         <Route path="/admin/ar-ap" element={<ProtectedRoute><ArApPage /></ProtectedRoute>} />
         <Route path="/admin/marketing" element={<ProtectedRoute><MarketingPage /></ProtectedRoute>} />
         <Route path="/admin/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
+        <Route path="/admin/stock" element={<ProtectedRoute><StockPage /></ProtectedRoute>} />
+        <Route path="/admin/storefront" element={<ProtectedRoute><StorefrontPage /></ProtectedRoute>} />
+        <Route path="/admin/webhooks" element={<ProtectedRoute><WebhooksPage /></ProtectedRoute>} />
         <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
