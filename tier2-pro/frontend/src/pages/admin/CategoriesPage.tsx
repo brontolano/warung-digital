@@ -54,18 +54,29 @@ export default function CategoriesPage() {
         </div>
 
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-center z-50" onClick={() => setShowModal(false)}>
-            <div className="bg-white w-full max-w-lg rounded-t-2xl p-6" onClick={e => e.stopPropagation()}>
-              <h2 className="text-xl font-bold mb-4">{editId ? 'Edit' : 'Tambah'} Kategori</h2>
-              <div className="space-y-3">
-                <input className="input-field" placeholder="Nama Kategori" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-                <div className="flex gap-2 flex-wrap">
-                  {['📦', '🍜', '🥤', '🫙', '🚬', '🧼', '✏️', '🍬', '🥫', '🧴', '📚', '🧸'].map(icon => (
-                    <button key={icon} onClick={() => setForm({ ...form, icon })} className={`text-2xl p-2 rounded-lg ${form.icon === icon ? 'bg-green-100 ring-2 ring-green-500' : 'bg-gray-100'}`}>{icon}</button>
-                  ))}
+          <div className="modal-overlay" onClick={() => setShowModal(false)}>
+            <div className="modal-content animate-in" onClick={e => e.stopPropagation()}>
+              <h2 className="text-xl font-bold mb-1">{editId ? '✏️ Edit Kategori' : '📂 Tambah Kategori'}</h2>
+              <p className="text-gray-400 text-sm mb-4">{editId ? 'Perbarui nama dan ikon kategori.' : 'Buat kategori baru untuk mengelompokkan produk.'}</p>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nama Kategori <span className="text-red-500">*</span></label>
+                  <input className="input-field" placeholder="Contoh: Makanan Ringan, Minuman, Sembako" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+                  <p className="text-xs text-gray-400 mt-0.5">Nama kelompok produk yang mudah dipahami (misal: Makanan, Minuman, Rokok)</p>
                 </div>
-                <div className="flex gap-2"><button onClick={() => setShowModal(false)} className="flex-1 bg-gray-200 py-3 rounded-lg">Batal</button>
-                  <button onClick={save} className="flex-1 bg-green-600 text-white py-3 rounded-lg">Simpan</button></div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Ikon Kategori</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {['📦', '🍜', '🥤', '🫙', '🚬', '🧼', '✏️', '🍬', '🥫', '🧴', '📚', '🧸', '👕', '🔧', '🎮', '🪴'].map(icon => (
+                      <button key={icon} onClick={() => setForm({ ...form, icon })} className={`text-2xl w-10 h-10 rounded-xl flex items-center justify-center transition-all ${form.icon === icon ? 'bg-emerald-100 ring-2 ring-emerald-500 scale-110' : 'bg-gray-100 hover:bg-gray-200'}`}>{icon}</button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-1">Pilih ikon yang mewakili kategori ini (akan muncul di toko online)</p>
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <button onClick={() => setShowModal(false)} className="flex-1 btn-secondary">Batal</button>
+                  <button onClick={save} className="flex-1 btn-primary">{editId ? '💾 Simpan' : '✅ Tambah Kategori'}</button>
+                </div>
               </div>
             </div>
           </div>

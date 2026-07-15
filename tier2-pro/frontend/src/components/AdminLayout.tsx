@@ -11,27 +11,42 @@ const navGroups = [
     ],
   },
   {
-    label: 'Kelola',
+    label: 'Produk & Stok',
     items: [
       { path: '/admin/products', icon: '📦', label: 'Produk' },
       { path: '/admin/categories', icon: '📂', label: 'Kategori' },
       { path: '/admin/stock', icon: '📋', label: 'Stok Opname' },
+      { path: '/admin/suppliers', icon: '🚚', label: 'Supplier' },
     ],
   },
   {
-    label: 'Keuangan',
+    label: 'Pelanggan & Marketing',
+    items: [
+      { path: '/admin/customers', icon: '👥', label: 'Pelanggan' },
+      { path: '/admin/marketing', icon: '🏆', label: 'Promosi' },
+      { path: '/admin/storefront', icon: '🏪', label: 'Toko Online' },
+    ],
+  },
+  {
+    label: 'Keuangan & Laporan',
     items: [
       { path: '/admin/cashdrawer', icon: '🧾', label: 'Shift Kasir' },
       { path: '/admin/ar-ap', icon: '💰', label: 'Hutang/Piutang' },
+      { path: '/admin/expenses', icon: '💸', label: 'Pengeluaran' },
       { path: '/admin/reports', icon: '📈', label: 'Laporan' },
     ],
   },
   {
-    label: 'Lainnya',
+    label: 'Karyawan & Pengaturan',
     items: [
-      { path: '/admin/storefront', icon: '🏪', label: 'Toko Online' },
-      { path: '/admin/marketing', icon: '🏆', label: 'Marketing' },
+      { path: '/admin/staff', icon: '👤', label: 'Karyawan' },
       { path: '/admin/attendance', icon: '⏱️', label: 'Absensi' },
+      { path: '/admin/branches', icon: '🏢', label: 'Cabang' },
+    ],
+  },
+  {
+    label: 'Layanan',
+    items: [
       { path: '/admin/webhooks', icon: '🔗', label: 'Integrasi' },
       { path: '/admin/settings', icon: '⚙️', label: 'Pengaturan' },
     ],
