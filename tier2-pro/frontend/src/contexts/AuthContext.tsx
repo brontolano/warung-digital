@@ -3,7 +3,7 @@ export const api = axios.create({ baseURL: '/api/v1' });
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-interface User { user_id: string; email: string; role: string; nama_warung: string; }
+interface User { user_id: string; email: string; role: string; nama_warung: string; nama_pemilik: string; }
 interface AuthContextType { user: User | null; loading: boolean; login: (email: string, password: string) => Promise<void>; logout: () => void; }
 const AuthContext = createContext<AuthContextType>(null!);
 
