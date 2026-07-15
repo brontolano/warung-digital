@@ -14,6 +14,11 @@ import StorefrontPage from './pages/admin/StorefrontPage';
 import WebhooksPage from './pages/admin/WebhooksPage';
 import ReportsPage from './pages/admin/ReportsPage';
 import SettingsPage from './pages/admin/SettingsPage';
+import CustomersPage from './pages/admin/CustomersPage';
+import SuppliersPage from './pages/admin/SuppliersPage';
+import ExpensesPage from './pages/admin/ExpensesPage';
+import BranchesPage from './pages/admin/BranchesPage';
+import StaffPage from './pages/admin/StaffPage';
 
 // Storefront
 import Home from './pages/storefront/Home';
@@ -33,25 +38,30 @@ export default function App() {
   return (
     <AuthProvider>
       <Routes>
-        {/* Storefront (Public) */}
+        {/* Storefront */}
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Katalog />} />
         <Route path="/products/:id" element={<Detail />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders/track" element={<TrackOrder />} />
 
-        {/* Admin Panel */}
+        {/* Admin */}
         <Route path="/admin/login" element={<LoginPage />} />
         <Route path="/admin" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
         <Route path="/admin/pos" element={<ProtectedRoute><POSPage /></ProtectedRoute>} />
         <Route path="/admin/products" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
         <Route path="/admin/categories" element={<ProtectedRoute><CategoriesPage /></ProtectedRoute>} />
+        <Route path="/admin/customers" element={<ProtectedRoute><CustomersPage /></ProtectedRoute>} />
+        <Route path="/admin/suppliers" element={<ProtectedRoute><SuppliersPage /></ProtectedRoute>} />
+        <Route path="/admin/expenses" element={<ProtectedRoute><ExpensesPage /></ProtectedRoute>} />
         <Route path="/admin/cashdrawer" element={<ProtectedRoute><CashdrawerPage /></ProtectedRoute>} />
         <Route path="/admin/ar-ap" element={<ProtectedRoute><ArApPage /></ProtectedRoute>} />
         <Route path="/admin/marketing" element={<ProtectedRoute><MarketingPage /></ProtectedRoute>} />
-        <Route path="/admin/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
         <Route path="/admin/stock" element={<ProtectedRoute><StockPage /></ProtectedRoute>} />
         <Route path="/admin/storefront" element={<ProtectedRoute><StorefrontPage /></ProtectedRoute>} />
+        <Route path="/admin/staff" element={<ProtectedRoute><StaffPage /></ProtectedRoute>} />
+        <Route path="/admin/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
+        <Route path="/admin/branches" element={<ProtectedRoute><BranchesPage /></ProtectedRoute>} />
         <Route path="/admin/webhooks" element={<ProtectedRoute><WebhooksPage /></ProtectedRoute>} />
         <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />

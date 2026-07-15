@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import AdminLayout from '../../components/AdminLayout';
+export default function StaffPage() {
+    return _jsx(AdminLayout, { children: _jsxs("div", { className: "space-y-4 max-w-5xl mx-auto", children: [_jsxs("div", { className: "page-header", children: [_jsxs("div", { children: [_jsx("h1", { children: "\uD83D\uDC64 Manajemen Karyawan" }), _jsx("p", { className: "text-gray-400 text-sm", children: "Atur akun & hak akses staf" })] }), _jsx("button", { className: "btn-primary", children: "+ Tambah Karyawan" })] }), _jsx("div", { className: "table-wrap", children: _jsxs("table", { children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { children: "Nama" }), _jsx("th", { children: "Posisi" }), _jsx("th", { children: "Email" }), _jsx("th", { children: "WhatsApp" }), _jsx("th", { children: "Status" }), _jsx("th", { children: "Terakhir Login" }), _jsx("th", { children: "Aksi" })] }) }), _jsx("tbody", { children: _jsx("tr", { children: _jsx("td", { colSpan: 7, className: "text-center py-12 text-gray-400", children: "Belum ada karyawan." }) }) })] }) })] }) });
+}
