@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import AdminLayout from '../../components/AdminLayout';
 
 export default function ReceiptPage() {
@@ -11,11 +11,11 @@ export default function ReceiptPage() {
   const [settings, setSettings] = useState({ nama: 'WarungDigital', alamat: 'Jl. Merdeka No. 123', footer: 'Terima kasih sudah berbelanja! 🙏' });
   const [editing, setEditing] = useState(false);
   const [printStatus, setPrintStatus] = useState('');
+  const receiptRef = useRef<HTMLDivElement>(null);
 
   const printReceipt = (method: string) => {
     if (method === 'thermal') {
       setPrintStatus('🖨️ Mengirim ke printer Bluetooth...');
-      // Web Bluetooth API for thermal printer
       const nb = (navigator as any);
       if (nb.bluetooth) {
         nb.bluetooth.requestDevice({ acceptAllDevices: true }).then((device: any) => {
@@ -26,7 +26,41 @@ export default function ReceiptPage() {
       }
       setTimeout(() => setPrintStatus(''), 3000);
     } else {
-      window.print();
+      // Cetak struk SAJA — bukan seluruh halaman
+      const printWindow = window.open('', '_blank', 'width=300,height=600');
+      if (!printWindow) { alert('Izinkan pop-up untuk mencetak struk'); return; }
+      printWindow.document.write(`
+        <html><head><title>Struk - ${preview.id}</title>
+        <style>
+          @page { margin: 0; size: 80mm auto; }
+          body { font-family: 'Courier New', monospace; font-size: 12px; width: 72mm; margin: 0 auto; padding: 10px 5px; }
+          .header { text-align: center; border-bottom: 1px dashed #000; padding-bottom: 8px; margin-bottom: 8px; }
+          .header h2 { margin: 0; font-size: 14px; }
+          .header p { margin: 2px 0; font-size: 10px; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { padding: 2px 0; text-align: left; }
+          .right { text-align: right; }
+          .total { font-weight: bold; border-top: 1px dashed #000; padding-top: 4px; margin-top: 4px; }
+          .footer { text-align: center; border-top: 1px dashed #000; padding-top: 8px; margin-top: 8px; font-size: 10px; }
+        </style></head>
+        <body>
+          <div class="header">
+            <h2>${settings.nama}</h2>
+            <p>${settings.alamat}</p>
+            <p>${preview.date}</p>
+          </div>
+          <p><strong>#${preview.id}</strong> | ${preview.method}</p>
+          <table>
+            <tr><th>Item</th><th class="right">Qty</th><th class="right">Harga</th></tr>
+            <tr><td>Barang 1</td><td class="right">2</td><td class="right">Rp 20.000</td></tr>
+            <tr><td>Barang 2</td><td class="right">1</td><td class="right">Rp 15.000</td></tr>
+          </table>
+          <div class="total"><table><tr><td><strong>TOTAL</strong></td><td class="right"><strong>Rp ${preview.total.toLocaleString()}</strong></td></tr></table></div>
+          <div class="footer">${settings.footer}<br>Terima kasih!</div>
+          <script>window.print(); window.close();</script>
+        </body></html>
+      `);
+      printWindow.document.close();
     }
   };
 
@@ -36,18 +70,13 @@ export default function ReceiptPage() {
         <div className="page-header"><div><h1>🧾 Cetak Struk</h1><p className="text-gray-400 text-sm">Riwayat transaksi & cetak ulang struk</p></div></div>
 
         <div className="grid md:grid-cols-2 gap-4">
-          {/* Daftar Transaksi */}
           <div className="card">
             <h3 className="font-bold mb-3">Transaksi Terakhir</h3>
             <div className="space-y-2">
               {recent.map(t => (
                 <div key={t.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                  <div>
-                    <p className="font-medium text-sm">#{t.id}</p>
-                    <p className="text-xs text-gray-400">{t.date} · {t.items} item</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold">Rp {t.total.toLocaleString()}</p>
+                  <div><p className="font-medium text-sm">#{t.id}</p><p className="text-xs text-gray-400">{t.date} · {t.items} item</p></div>
+                  <div className="text-right"><p className="font-bold">Rp {t.total.toLocaleString()}</p>
                     <div className="flex gap-1 mt-1">
                       <button onClick={() => { setPreview(t); }} className="text-xs text-emerald-600 hover:underline">👁️ Lihat</button>
                       <button onClick={() => { setPreview(t); setTimeout(() => printReceipt('thermal'), 300); }} className="text-xs text-blue-600 hover:underline">🖨️ Cetak</button>
@@ -59,13 +88,12 @@ export default function ReceiptPage() {
             </div>
           </div>
 
-          {/* Preview + Cetak */}
           <div className="card">
             <h3 className="font-bold mb-3">🖨️ Preview & Cetak</h3>
             {printStatus && <div className="text-sm mb-2 p-2 bg-blue-50 rounded-lg">{printStatus}</div>}
             {preview ? (
               <div>
-                <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 text-sm font-mono" id="receipt-area">
+                <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 text-sm font-mono" id="receipt-area" ref={receiptRef}>
                   <div className="text-center border-b pb-2 mb-2">
                     <p className="font-bold text-base">{settings.nama}</p>
                     <p className="text-xs text-gray-400">{settings.alamat}</p>
@@ -81,13 +109,8 @@ export default function ReceiptPage() {
                   <p className="text-center text-xs text-gray-400 mt-2 pt-2 border-t">{settings.footer}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mt-3">
-                  <button onClick={() => printReceipt('thermal')} className="btn-primary flex items-center justify-center gap-2">
-                    🖨️ Cetak Bluetooth
-                    <span className="text-xs opacity-70">(thermal)</span>
-                  </button>
-                  <button onClick={() => printReceipt('browser')} className="btn-secondary flex items-center justify-center gap-2">
-                    🖨️ Cetak Browser
-                  </button>
+                  <button onClick={() => printReceipt('thermal')} className="btn-primary flex items-center justify-center gap-2">🖨️ Cetak Bluetooth</button>
+                  <button onClick={() => printReceipt('browser')} className="btn-secondary flex items-center justify-center gap-2">🖨️ Cetak Browser</button>
                 </div>
               </div>
             ) : (
@@ -96,22 +119,14 @@ export default function ReceiptPage() {
           </div>
         </div>
 
-        {/* Pengaturan Struk */}
         <div className="card">
-          <div className="flex justify-between items-center mb-3">
-            <h3 className="font-bold">⚙️ Pengaturan Struk</h3>
-            <button onClick={() => setEditing(!editing)} className="btn btn-sm btn-secondary">
-              {editing ? '🔒 Selesai' : '✏️ Edit'}
-            </button>
-          </div>
+          <div className="flex justify-between items-center mb-3"><h3 className="font-bold">⚙️ Pengaturan Struk</h3>
+            <button onClick={() => setEditing(!editing)} className="btn btn-sm btn-secondary">{editing ? '🔒 Selesai' : '✏️ Edit'}</button></div>
           {editing ? (
             <div className="grid md:grid-cols-3 gap-3">
-              <div><label className="text-sm font-medium block mb-1">Nama Toko</label>
-                <input className="input-field" value={settings.nama} onChange={e => setSettings({...settings, nama: e.target.value})} /></div>
-              <div><label className="text-sm font-medium block mb-1">Alamat Toko</label>
-                <input className="input-field" value={settings.alamat} onChange={e => setSettings({...settings, alamat: e.target.value})} /></div>
-              <div><label className="text-sm font-medium block mb-1">Footer Struk</label>
-                <input className="input-field" value={settings.footer} onChange={e => setSettings({...settings, footer: e.target.value})} /></div>
+              <div><label className="text-sm font-medium block mb-1">Nama Toko</label><input className="input-field" value={settings.nama} onChange={e => setSettings({...settings, nama: e.target.value})} /></div>
+              <div><label className="text-sm font-medium block mb-1">Alamat Toko</label><input className="input-field" value={settings.alamat} onChange={e => setSettings({...settings, alamat: e.target.value})} /></div>
+              <div><label className="text-sm font-medium block mb-1">Footer Struk</label><input className="input-field" value={settings.footer} onChange={e => setSettings({...settings, footer: e.target.value})} /></div>
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-3 text-sm">
