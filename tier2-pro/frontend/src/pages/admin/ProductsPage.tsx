@@ -9,7 +9,7 @@ export default function ProductsPage() {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: '', barcode: '', purchase_price: 0, sell_price: 0,
-    stock: 0, min_stock: 5, unit: 'pcs', category_id: '', description: ''
+    stock: 0, min_stock: 5, unit: 'pcs', category_id: '', description: '', image: ''
   });
 
   const loadProducts = () => api.get('/products', { params: { store_id: 'default' } }).then(r => setProducts(r.data)).catch(() => {});
@@ -19,13 +19,13 @@ export default function ProductsPage() {
 
   const openAdd = () => {
     setEditId(null);
-    setForm({ name: '', barcode: '', purchase_price: 0, sell_price: 0, stock: 0, min_stock: 5, unit: 'pcs', category_id: '', description: '' });
+    setForm({ name: '', barcode: '', purchase_price: 0, sell_price: 0, stock: 0, min_stock: 5, unit: 'pcs', category_id: '', description: '', image: '' });
     setShowModal(true);
   };
 
   const openEdit = (p: any) => {
     setEditId(p.product_id);
-    setForm({ name: p.name || '', barcode: p.barcode || '', purchase_price: p.purchase_price || 0, sell_price: p.sell_price || 0, stock: p.stock || 0, min_stock: p.min_stock || 5, unit: p.unit || 'pcs', category_id: p.category_id || '', description: p.description || '' });
+    setForm({ name: p.name || '', barcode: p.barcode || '', purchase_price: p.purchase_price || 0, sell_price: p.sell_price || 0, stock: p.stock || 0, min_stock: p.min_stock || 5, unit: p.unit || 'pcs', category_id: p.category_id || '', description: p.description || '', image: p.image || '' });
     setShowModal(true);
   };
 
@@ -153,6 +153,17 @@ export default function ProductsPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (opsional)</label>
                   <textarea className="input-field" rows={2} placeholder="Deskripsi singkat tentang produk ini (misal: warna, ukuran, rasa)" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
                   <p className="text-xs text-gray-400 mt-0.5">Keterangan tambahan yang bisa membantu pelanggan atau karyawan</p>
+                </div>
+
+                {/* Gambar */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Gambar Produk (opsional)</label>
+                  <div className="flex gap-2">
+                    <input className="input-field" placeholder="URL gambar (https://...) atau tempel langsung" value={form.image} onChange={e => setForm({...form, image: e.target.value})} />
+                    <label className="btn btn-secondary cursor-pointer whitespace-nowrap">📷 Upload<input type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) { const r = new FileReader(); r.onload = ev => setForm({...form, image: ev.target?.result as string || ''}); r.readAsDataURL(f); } }} /></label>
+                  </div>
+                  {form.image && <div className="mt-2 flex gap-2 items-center"><img src={form.image} className="w-16 h-16 object-cover rounded-lg border" /><button onClick={() => setForm({...form, image: ''})} className="text-red-500 text-xs">✕ Hapus</button></div>}
+                  <p className="text-xs text-gray-400 mt-0.5">Upload foto produk dari HP atau paste URL gambar</p>
                 </div>
 
                 <div className="flex gap-2 pt-2">
