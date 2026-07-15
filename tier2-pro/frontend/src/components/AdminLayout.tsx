@@ -8,6 +8,8 @@ const navGroups = [
     items: [
       { path: '/admin', icon: '📊', label: 'Dashboard' },
       { path: '/admin/pos', icon: '🛒', label: 'POS Kasir' },
+      { path: '/admin/pos-offline', icon: '📡', label: 'POS Offline' },
+      { path: '/admin/receipt', icon: '🧾', label: 'Cetak Struk' },
     ],
   },
   {
@@ -15,7 +17,9 @@ const navGroups = [
     items: [
       { path: '/admin/products', icon: '📦', label: 'Produk' },
       { path: '/admin/categories', icon: '📂', label: 'Kategori' },
+      { path: '/admin/multi-unit', icon: '📏', label: 'Multi Satuan' },
       { path: '/admin/stock', icon: '📋', label: 'Stok Opname' },
+      { path: '/admin/stock-mutation', icon: '📊', label: 'Mutasi Stok' },
       { path: '/admin/suppliers', icon: '🚚', label: 'Supplier' },
     ],
   },
@@ -24,23 +28,28 @@ const navGroups = [
     items: [
       { path: '/admin/customers', icon: '👥', label: 'Pelanggan' },
       { path: '/admin/marketing', icon: '🏆', label: 'Promosi' },
+      { path: '/admin/referral', icon: '🎁', label: 'Referral' },
       { path: '/admin/storefront', icon: '🏪', label: 'Toko Online' },
+      { path: '/admin/linktoko', icon: '🔗', label: 'Linktoko' },
     ],
   },
   {
-    label: 'Keuangan & Laporan',
+    label: 'Keuangan',
     items: [
       { path: '/admin/cashdrawer', icon: '🧾', label: 'Shift Kasir' },
       { path: '/admin/ar-ap', icon: '💰', label: 'Hutang/Piutang' },
       { path: '/admin/expenses', icon: '💸', label: 'Pengeluaran' },
+      { path: '/admin/qris', icon: '💳', label: 'QRIS' },
+      { path: '/admin/ppob', icon: '📱', label: 'PPOB' },
       { path: '/admin/reports', icon: '📈', label: 'Laporan' },
     ],
   },
   {
-    label: 'Karyawan & Pengaturan',
+    label: 'Karyawan & Resto',
     items: [
       { path: '/admin/staff', icon: '👤', label: 'Karyawan' },
       { path: '/admin/attendance', icon: '⏱️', label: 'Absensi' },
+      { path: '/admin/food-menu', icon: '🍽️', label: 'Food Menu' },
       { path: '/admin/branches', icon: '🏢', label: 'Cabang' },
     ],
   },

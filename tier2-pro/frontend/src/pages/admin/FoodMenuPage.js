@@ -1,0 +1,13 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useState } from 'react';
+import AdminLayout from '../../components/AdminLayout';
+export default function FoodMenuPage() {
+    const [tab, setTab] = useState('menus');
+    const menus = [
+        { name: 'Nasi Goreng', price: 25000, category: 'Makanan', sales: 45 },
+        { name: 'Mie Goreng', price: 20000, category: 'Makanan', sales: 38 },
+        { name: 'Es Teh', price: 5000, category: 'Minuman', sales: 60 },
+        { name: 'Ayam Geprek', price: 28000, category: 'Makanan', sales: 22 },
+    ];
+    return _jsx(AdminLayout, { children: _jsxs("div", { className: "space-y-4 max-w-5xl mx-auto", children: [_jsxs("div", { className: "page-header", children: [_jsxs("div", { children: [_jsx("h1", { children: "\uD83C\uDF7D\uFE0F Food Menu \u2014 QR Self Order" }), _jsx("p", { className: "text-gray-400 text-sm", children: "Pelanggan scan QR, pesan sendiri dari HP" })] }), _jsx("button", { className: "btn-primary", children: "+ Tambah Menu" })] }), _jsx("div", { className: "flex gap-2 border-b pb-2", children: ['menus', 'qr', 'orders'].map(t => (_jsx("button", { onClick: () => setTab(t), className: `px-4 py-2 rounded-lg text-sm font-medium ${tab === t ? 'bg-emerald-600 text-white' : 'bg-gray-100'}`, children: t === 'menus' ? '📋 Daftar Menu' : t === 'qr' ? '📱 QR Code' : '🛵 Pesanan Masuk' }, t))) }), tab === 'menus' && _jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3", children: menus.map((m, i) => (_jsxs("div", { className: "card text-center hover:shadow-md", children: [_jsx("div", { className: "text-4xl mb-2", children: "\uD83C\uDF7D\uFE0F" }), _jsx("p", { className: "font-bold", children: m.name }), _jsxs("p", { className: "text-emerald-600 font-bold", children: ["Rp ", m.price.toLocaleString()] }), _jsxs("p", { className: "text-xs text-gray-400", children: [m.sales, " terjual"] })] }, i))) }), tab === 'qr' && _jsxs("div", { className: "card text-center py-8", children: [_jsx("div", { className: "text-8xl mb-4", children: "\uD83D\uDCF1" }), _jsx("p", { className: "text-lg font-bold", children: "QR Code Meja" }), _jsx("p", { className: "text-sm text-gray-400 mb-4", children: "Pelanggan scan untuk lihat menu & pesan" }), _jsxs("div", { className: "flex gap-2 justify-center", children: [_jsx("button", { className: "btn-primary", children: "\uD83D\uDDA8\uFE0F Cetak QR Meja 1" }), _jsx("button", { className: "btn-secondary", children: "\uD83D\uDDA8\uFE0F Cetak Semua" })] })] }), tab === 'orders' && _jsx("div", { className: "card", children: _jsx("p", { className: "text-center py-8 text-gray-400", children: "Belum ada pesanan masuk" }) })] }) });
+}

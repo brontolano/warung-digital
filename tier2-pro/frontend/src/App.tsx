@@ -19,6 +19,15 @@ import SuppliersPage from './pages/admin/SuppliersPage';
 import ExpensesPage from './pages/admin/ExpensesPage';
 import BranchesPage from './pages/admin/BranchesPage';
 import StaffPage from './pages/admin/StaffPage';
+import ReceiptPage from './pages/admin/ReceiptPage';
+import MultiUnitPage from './pages/admin/MultiUnitPage';
+import StockMutationPage from './pages/admin/StockMutationPage';
+import QrisPage from './pages/admin/QrisPage';
+import PpobPage from './pages/admin/PpobPage';
+import FoodMenuPage from './pages/admin/FoodMenuPage';
+import PosOfflinePage from './pages/admin/PosOfflinePage';
+import LinktokoPage from './pages/admin/LinktokoPage';
+import ReferralPage from './pages/admin/ReferralPage';
 
 // Storefront
 import Home from './pages/storefront/Home';
@@ -62,6 +71,15 @@ export default function App() {
         <Route path="/admin/staff" element={<ProtectedRoute><StaffPage /></ProtectedRoute>} />
         <Route path="/admin/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
         <Route path="/admin/branches" element={<ProtectedRoute><BranchesPage /></ProtectedRoute>} />
+        <Route path="/admin/receipt" element={<ProtectedRoute><ReceiptPage /></ProtectedRoute>} />
+        <Route path="/admin/multi-unit" element={<ProtectedRoute><MultiUnitPage /></ProtectedRoute>} />
+        <Route path="/admin/stock-mutation" element={<ProtectedRoute><StockMutationPage /></ProtectedRoute>} />
+        <Route path="/admin/qris" element={<ProtectedRoute><QrisPage /></ProtectedRoute>} />
+        <Route path="/admin/ppob" element={<ProtectedRoute><PpobPage /></ProtectedRoute>} />
+        <Route path="/admin/food-menu" element={<ProtectedRoute><FoodMenuPage /></ProtectedRoute>} />
+        <Route path="/admin/pos-offline" element={<ProtectedRoute><PosOfflinePage /></ProtectedRoute>} />
+        <Route path="/admin/linktoko" element={<ProtectedRoute><LinktokoPage /></ProtectedRoute>} />
+        <Route path="/admin/referral" element={<ProtectedRoute><ReferralPage /></ProtectedRoute>} />
         <Route path="/admin/webhooks" element={<ProtectedRoute><WebhooksPage /></ProtectedRoute>} />
         <Route path="/admin/reports" element={<ProtectedRoute><ReportsPage /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
